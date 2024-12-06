@@ -1,0 +1,121 @@
+---
+import MenuItem from "./menu/Item.astro";
+import OrderDialog from "./OrderDialog.astro";
+
+interface MenuCategory {
+  title: string;
+  items: {
+    title: string;
+    description: string;
+    price: number;
+    image: string;
+  }[];
+}
+
+const menuData: MenuCategory[] = [
+  {
+    title: "Hamburguesas",
+    items: [
+      {
+        title: "La W",
+        description:
+          "Combina el sabor de dos hamburguesas la de pollo y la carne, con un toquecito de bbq picante que hace que la sinergia de estos sabores combine perfectamente.",
+        price: 36500,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/e48f0369-3ff5-4b63-8f47-d106773ae4e9_caae17a155.webp",
+      },
+      {
+        title: "La Clásica",
+        description:
+          "Pan brioche, carne de res 150gr, queso cheddar, cebolla caramelizada, lechuga, tomate, BBQ maple y mayonesa de pimentón.",
+        price: 27900,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/6d3ff5e8-bb74-4cd8-97ee-519cab4e5af8_01fe76b66d.webp",
+      },
+      {
+        title: "La Bandida",
+        description:
+          "Pan brioche, carne de res 150gr, queso Philadelphia, queso cheddar, tocineta caramelizada en BBQ maple, lechuga, tomate, BBQ maple y mayonesa de pimentón.",
+        price: 29900,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/7462fca0-1258-4d9a-806b-c602ce8880ea_29a86106ce.webp",
+      },
+      {
+        title: "La Bomba",
+        description:
+          "Pan brioche, carne de res 150gr, doble queso cheddar, costilla de cerdo en miel de naranja, tocineta, cebolla crujiente, lechuga, tomate, salsa BBQ maple, mayonesa de pimentón y garlic.",
+        price: 36500,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/5a9f7abb-70e7-4bd5-9a4d-5c225bba0088_82eb87edd5.webp",
+      },
+      {
+        title: "Pámpara",
+        description:
+          "Pan brioche, con filete de pechuga apanado en panko 150gr, queso mozzarella, sour cream de ajo, tocineta caramelizada en BBQ maple, lechuga, tomate, BBQ maple, mayonesa de pimentón.",
+        price: 29900,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/42baab7f-1d43-44bf-8a77-0dcfb80d418e_039c561531.webp",
+      },
+      {
+        title: "La Estrellita",
+        description:
+          "Pan brioche, carne de 150gr de res, queso Philadelphia, tocineta, reducción de frutos rojos, lechuga, tomate, mayonesa de pimentón y BBQ maple.",
+        price: 29900,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/254d5cb5-251d-4850-8e7f-0e3fd989cad9_361ab8d020.webp",
+      },
+    ],
+  },
+  {
+    title: "Acompañantes",
+    items: [
+      {
+        title: "Papas a la francesa",
+        description: "Crispy golden fries seasoned with our special spice blend",
+        price: 5000,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/8da51977-a53c-4735-8471-4f05dae9b8ca_946680995a.webp",
+      },
+      {
+        title: "Coca Cola 400ml",
+        description: "Ice-cold Coca Cola to complement your meal",
+        price: 6000,
+        image:
+          "https://s3yuuprod.s3.us-east-2.amazonaws.com/ab38e69c-9794-4ccf-9d7b-058cf4e84ea5_c4c4935c58.webp",
+      },
+    ],
+  },
+];
+---
+
+<section id="menu" class="py-20 bg-black">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2
+        class="font-display text-4xl md:text-5xl mb-4 relative inline-block text-fuego-red font-bold"
+      >
+        MENÚ
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        Pille pues estas groserías que tenemos disponibles pa' su paladar
+      </p>
+    </div>
+
+    {
+      menuData.map((category) => (
+        <div class="mb-16 last:mb-0">
+          <h3 class="font-display text-3xl mb-8 text-fuego-yellow">
+            {category.title}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {category.items.map((item) => (
+              <MenuItem {...item} />
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <OrderDialog id="order-dialog" />
+</section>

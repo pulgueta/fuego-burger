@@ -1,0 +1,96 @@
+---
+import SocialLinks from "./Social.astro";
+
+interface FooterLink {
+  title: string;
+  links: {
+    text: string;
+    href: string;
+  }[];
+}
+
+const footerSections: FooterLink[] = [
+  {
+    title: "Ubicaciones",
+    links: [
+      {
+        text: "Fuego Burger - Sabaneta, Antioquia",
+        href: "https://maps.google.com/?q=Fuego+Burger+Sabaneta",
+      },
+      {
+        text: "Fuego Burger - Chapinero, Bogotá D.C.",
+        href: "https://maps.google.com/?q=Antioquia+Colombia",
+      },
+      {
+        text: "3141234567",
+        href: "tel:+573141234567",
+      },
+    ],
+  },
+  {
+    title: "Políticas",
+    links: [
+      {
+        text: "Términos y condiciones",
+        href: "/terms",
+      },
+      {
+        text: "Política de privacidad",
+        href: "/privacy",
+      },
+      {
+        text: "Código fuente",
+        href: "https://github.com/pulgueta/fuego-burger",
+      },
+    ],
+  },
+];
+---
+
+<footer class="bg-neutral-900">
+  <div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div class="space-y-6">
+        <a href="/" aria-label="Ir al inicio">
+          <img
+            src="https://s3yuuprod.s3.us-east-2.amazonaws.com/f65f6c4d-44db-40b6-ac7c-dd5b9b50f4b2_d6a77a602f.webp"
+            alt="Logo de Fuego Burger"
+            class="size-32 rounded"
+            draggable="false"
+          />
+        </a>
+
+        <p class="text-white font-display">De barrio, pero elegante</p>
+        <SocialLinks />
+      </div>
+
+      {
+        footerSections.map((section) => (
+          <div>
+            <h3 class="font-display text-lg mb-6">{section.title}</h3>
+            <ul class="space-y-4">
+              {section.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-white hover:text-fuego-red transition-colors duration-300 text-sm"
+                  >
+                    {link.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-gray-800">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-white text-sm text-center md:text-left">
+          Esta página no es oficial de Fuego Burger
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

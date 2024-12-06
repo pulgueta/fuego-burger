@@ -63,6 +63,9 @@
           "style": {
             "useConst": "off",
             "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off"
           }
         }
       }

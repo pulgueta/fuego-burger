@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        "fuego-red": "#FF0000",
+        "fuego-red": "#FF1E38",
         "fuego-orange": "#FFA500",
         "fuego-yellow": "#FFD700",
       },

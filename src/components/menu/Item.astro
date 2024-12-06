@@ -1,0 +1,59 @@
+---
+import { priceFormatter } from "@/lib/utils";
+
+interface Props {
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+const { title, description, price, image } = Astro.props;
+---
+
+<div
+  class="group relative overflow-hidden rounded-xl bg-gray-900 transition-transform duration-300 hover:scale-105 hover:z-10"
+>
+  <div class="aspect-square overflow-hidden">
+    <img
+      src={image}
+      alt={title}
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+  </div>
+  <div
+    class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
+  >
+    <div class="absolute bottom-0 p-6 w-full">
+      <h3
+        class="font-display text-2xl mb-2 text-white group-hover:text-fuego-red transition-colors font-semibold"
+      >
+        {title}
+      </h3>
+      <div class="flex justify-between items-center">
+        <span class="text-fuego-yellow font-display text-xl">
+          {priceFormatter(price)}
+        </span>
+        <button
+          class="order-btn bg-fuego-red hover:bg-red-700 text-white px-4 py-2 rounded-full font-display text-sm transition-colors"
+          data-item={JSON.stringify({ title, description, price, image })}
+        >
+          Agregar al pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ item: Astro.props }} is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const orderButtons = document.querySelectorAll(".order-btn");
+
+    orderButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const item = JSON.parse(button.dataset.item);
+        window.updateOrderDialog(item);
+      });
+    });
+  });
+</script>

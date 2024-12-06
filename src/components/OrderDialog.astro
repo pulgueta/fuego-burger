@@ -1,0 +1,210 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<dialog
+  id={id}
+  class="bg-gray-900 text-white rounded-xl p-0 backdrop:bg-black/80 w-full max-w-5xl mx-auto opacity-0 transition-opacity duration-300"
+>
+  <div
+    class="relative transform translate-y-4 opacity-0 transition-all duration-300"
+  >
+    <button
+      class="close-dialog absolute right-4 top-4 text-gray-400 hover:text-white z-10"
+      aria-label="Close dialog"
+    >
+      <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="grid md:grid-cols-2">
+      <div class="relative aspect-square">
+        <img
+          id={`${id}-image`}
+          src=""
+          alt=""
+          class="w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"
+        >
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div>
+          <h2 id={`${id}-title`} class="font-display text-2xl mb-2"></h2>
+          <p id={`${id}-description`} class="text-gray-400 text-sm"></p>
+          <p
+            id={`${id}-price`}
+            class="text-fuego-yellow font-display text-xl mt-2"
+          >
+          </p>
+        </div>
+
+        <form id={`${id}-form`} class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              Instrucciones especiales
+            </label>
+            <textarea
+              name="instructions"
+              rows="3"
+              class="w-full px-4 py-2 bg-gray-800 placeholder:text-sm border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-fuego-red focus:ring-1 focus:ring-fuego-red focus:outline-none transition-colors resize-none"
+              placeholder="Ejemplo: Sin cebolla, extra queso, etc."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              Cantidad
+            </label>
+            <div class="flex items-center space-x-4">
+              <button
+                type="button"
+                class="quantity-btn decrease w-10 h-10 rounded-full bg-gray-800 border border-gray-700 hover:border-fuego-red transition-colors flex items-center justify-center"
+                aria-label="Decrease quantity"
+              >
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20 12H4"></path>
+                </svg>
+              </button>
+              <input
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                max="10"
+                class="w-16 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-center text-white focus:border-fuego-red focus:ring-1 focus:ring-fuego-red focus:outline-none transition-colors"
+              />
+              <button
+                type="button"
+                class="quantity-btn increase w-10 h-10 rounded-full bg-gray-800 border border-gray-700 hover:border-fuego-red transition-colors flex items-center justify-center"
+                aria-label="Increase quantity"
+              >
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-fuego-red hover:bg-red-700 text-white font-display py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <span>Agregar al pedido</span>
+            <span id={`${id}-total`} class="text-white/80"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  dialog[open]::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  dialog[open] {
+    opacity: 1;
+  }
+
+  dialog[open] > div {
+    transform: translateY(0);
+    opacity: 1;
+  }
+</style>
+
+<script define:vars={{ id }} is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const dialog = document.getElementById(id);
+    const closeBtn = dialog.querySelector(".close-dialog");
+    const form = dialog.querySelector("form");
+    const quantityInput = form.querySelector('input[name="quantity"]');
+    const decreaseBtn = form.querySelector(".quantity-btn.decrease");
+    const increaseBtn = form.querySelector(".quantity-btn.increase");
+    const totalSpan = document.getElementById(`${id}-total`);
+
+    let currentPrice = 0;
+
+    const updateTotal = () => {
+      const quantity = parseInt(quantityInput.value);
+      const total = currentPrice * quantity;
+      totalSpan.textContent = `($${total.toLocaleString()})`;
+    };
+
+    const handleQuantityChange = (newValue) => {
+      const value = Math.max(1, Math.min(10, newValue));
+      quantityInput.value = value;
+      updateTotal();
+    };
+
+    const closeDialog = () => dialog.close();
+
+    decreaseBtn.addEventListener("click", () => {
+      handleQuantityChange(parseInt(quantityInput.value) - 1);
+    });
+
+    increaseBtn.addEventListener("click", () => {
+      handleQuantityChange(parseInt(quantityInput.value) + 1);
+    });
+
+    quantityInput.addEventListener("change", (e) => {
+      handleQuantityChange(parseInt(e.target.value));
+    });
+
+    closeBtn.addEventListener("click", closeDialog);
+
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) {
+        closeDialog();
+      }
+    });
+
+    window.updateOrderDialog = (item) => {
+      document.getElementById(`${id}-image`).src = item.image;
+      document.getElementById(`${id}-image`).alt = item.title;
+      document.getElementById(`${id}-title`).textContent = item.title;
+      document.getElementById(`${id}-description`).textContent =
+        item.description;
+      document.getElementById(`${id}-price`).textContent =
+        `$${item.price.toLocaleString()}`;
+      currentPrice = item.price;
+      updateTotal();
+      dialog.showModal();
+    };
+  });
+</script>
